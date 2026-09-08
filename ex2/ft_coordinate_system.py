@@ -20,11 +20,18 @@ def get_player_pos() -> tuple[float, ...]:
                                   "in format 'x,y,z': ").split(',')
     coord_lst:  list[float] = [n for s in raw
                                if (n := try_float(s)) is not None]
-    if len(coord_lst) != 3:
+    if list_len(coord_lst) != 3:
         print("Invald input")
         raise CoordError()
     coordinates:    tuple[float, ...] = tuple(coord_lst)
     return (coordinates)
+
+
+def list_len(lst: list[float]) -> int:
+    i:  int = 0
+    for _ in lst:
+        i += 1
+    return i
 
 
 def euclide(coord1: tuple[float, ...], coord2: tuple[float, ...]) -> float:
@@ -63,7 +70,7 @@ def coordinate_system() -> None:
     print(f"Got first tuple: {coord1}")
     print("It includes:", end=" ")
     print_coord(coord1, 1)
-    print(f"Distance from center: {euclide(coord1, (0, 0, 0))}")
+    print(f"\nDistance from center: {euclide(coord1, (0, 0, 0))}\n")
 
     print("Get second set of coordinates")
     coord2 = None
@@ -75,7 +82,7 @@ def coordinate_system() -> None:
     print(f"Got second tuple: {coord2}")
     print("It includes:", end=" ")
     print_coord(coord2, 2)
-    print(f"Distance between the two sets of coordinates: "
+    print(f"\nDistance between the two sets of coordinates: "
           f"{euclide(coord2, coord1)}")
 
 

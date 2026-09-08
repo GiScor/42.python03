@@ -2,7 +2,7 @@ import sys
 
 
 def scoreboard(scores: list[int]) -> None:
-    o_scores:       list = order_scores(scores)
+    o_scores:       list[int] = order_scores(scores)
     total:          int = sum(scores)
     avg:            float = total / len(scores)
     high_score:     int = max(scores)
@@ -17,79 +17,75 @@ def scoreboard(scores: list[int]) -> None:
         "Lowest score",
         "Score range",
         "High Score",
-        "Leaderboard",
     ]
     for n in tab1:
-        if n ==  "Leaderboard":
+        if n == "Leaderboard":
             continue
         else:
             longest = max(longest, len(n))
     width:          int = max(count_char(max(o_scores)), longest)
     padding:        int = width // 2
-    tab2:           list[int | list[int]] = [
+    tab2:           list[int | float | list[int]] = [
         total_players,
         total,
         avg,
         low_score,
         high_score - low_score,
         high_score,
-        o_scores,
     ]
     if longest > padding:
         padding = longest
         width = padding*2
-    pretty("Scores", scores, width, padding, fill='', wrap='')
-    print(f"{"SCORE ANALYTICS":+^{width+padding+padding+6}}")
+    print(f" {'SCORE ANALYTICS':+^{width+padding+padding+4}} ")
     count = 1
-    for i in range(1, 7):
+    for i in range(1, 6):
         name:   str = tab1[i]
-        val:    int = tab2[i]
+        val:    int | float | list[int] = tab2[i]
         osc_animation(width, padding, 3)
-        if name == 'Leaderboard':
-            print("|", end='')
-            row = pretty(None, name, width, padding,
-                         fill=' ', align='^', wrap='', end=' ')
-            print("|")
-            for i in val:
-                row = pretty(count, i, width, padding, fill='.', align='^')
-                count += 1
-        elif name == "High Score":
-            print(" ","+" * (row),sep="")
+        if name != "High Score":
+            row = pretty(name, val, width, padding,)
+        else:
+            print(" ", "+" * (row-2), sep="")
             row = pretty(None, name, width, padding, fill='~', align='^')
             row = pretty(None, val, width, padding, fill='~', align='^')
-            print(" ","+" * (row),sep="")
-        else:
-            row = pretty(name, val, width, padding,)
-    print(f"{"GAME OVER":+^{width+padding+padding+6}}")
+            print(" ", "+" * (row-2), sep="")
+    print("|", end='')
+    row = pretty(None, "Leaderboard", width, padding,
+                 fill=' ', align='^', wrap='', end=' ')
+    print("|")
+    for j in o_scores:
+        row = pretty(count, j, width, padding, fill='.', align='^')
+        count += 1
+    print(f" {'GAME OVER':+^{width+padding+padding+4}} ")
 
 
-def pretty(name: str|int, val: list[int]|int|float|None,
-           width: int, padding: int, fill = '.',
+def pretty(name: str | int | None, val: list[int] | int | float | str | None,
+           width: int, padding: int, fill: str = '.',
            align: str = '>', end: str = '\n', wrap: str = '|') -> int:
     if name is None:
         if align == '^':
-            col1 = f" {f"{fill}":{fill}{'>'}{padding-1}} {wrap}"
-            col2 = f"{f"{val}":{align}{width + 3}}"
-            col3 = f"{f"{wrap} ":{fill}{'<'}{padding-2}} "
+            col1 = f" {fill:{fill}>{padding-1}} {wrap}"
+            col2 = f"{val:{align}{width + 3}}"
+            col3 = f"{wrap :{fill}<{padding-2}} "
 
             print(f"{wrap}{col1 + col2 + col3}{wrap}", end=end)
-            return(len(f"{wrap}{col1 + col2 + col3}{wrap}"))
+            return (len(f"{wrap}{col1 + col2 + col3}{wrap}"))
     else:
         if align == '^':
-            col1 = f" {f" {name}":{'~'}{'>'}{padding+1}}"
-            col2 = f" {f"{val} ":{fill}{'>'}{width + 2}}{wrap}"
-            col3 = f" {f" {wrap}":{'~'}{'>'}{padding-2}}"
+            col1 = f" {name:~>{padding+1}}"
+            col2 = f" {val:{fill}>{width + 2}}{wrap}"
+            col3 = f" {wrap:~>{padding-2}}"
             print(f"{wrap}{col1 + col2 + col3}", end=end)
-            return(len(f"{wrap}{col1 + col2 + col3}"))
+            return (len(f"{wrap}{col1 + col2 + col3}"))
         else:
-            col1 = f"{f"{name}":>{padding}} {wrap}"
-            col2 = f" {f" {val} ":{fill}{align}{width + padding + 1}}{wrap}"
+            col1 = f"{f'{name}':>{padding}} {wrap}"
+            col2 = f" {f' {val} ':{fill}{align}{width + padding + 1}}{wrap}"
             print(f"{wrap}{col1 + col2}", end=end)
-            return(len(f"{wrap}{col1 + col2}"))
-    my_sleep(25)
+            return (len(f"{wrap}{col1 + col2}"))
+    return (0)
 
 
-def osc_animation(width: int, padding: int, time: int):
+def osc_animation(width: int, padding: int, time: int) -> None:
     width *= 2
     left:   int = 0
     right:  int = width
@@ -122,7 +118,7 @@ def try_int(s: str) -> int | None:
         return None
 
 
-def order_scores(scores: list[int]) -> list:
+def order_scores(scores: list[int]) -> list[int]:
     o_scores = scores
     temp = 0
     while not check_order(o_scores):
@@ -132,7 +128,7 @@ def order_scores(scores: list[int]) -> list:
                 o_scores[i] = o_scores[i+1]
                 o_scores[i+1] = temp
         i = 0
-    return(o_scores)
+    return (o_scores)
 
 
 def check_order(scores: list[int]) -> bool:
