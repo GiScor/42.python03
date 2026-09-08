@@ -16,6 +16,16 @@ class RedundancyError(Exception):
         super().__init__(message)
 
 
+def try_int(s: str) -> int | None:
+    try:
+        if int(s) <= 0:
+            raise ValueError
+        return int(s)
+    except ValueError:
+        print(f"ValueError: argument '{s}' is not a valid int")
+        return None
+
+
 def try_dict(arg: str, inv: dict) -> list[str]:
     colon: int = 0
     count: int = 0
@@ -24,10 +34,10 @@ def try_dict(arg: str, inv: dict) -> list[str]:
             colon = i
             count += 1
     if colon < 1 or count != 1:
-        raise FormatError(f"Invalid colon position in {arg}")
+        raise FormatError(f"Invalid colon position in '{arg}'")
     if arg[:colon] in inv:
         raise RedundancyError(f"Redundant item '{arg}' -- discarding")
-    return([arg[:colon], arg[colon+1:]])
+    return([arg[:colon], try_int(arg[colon+1:])])
 
 
 
@@ -36,7 +46,8 @@ if __name__ == '__main__':
     inv:    dict = {}
     for arg in args:
         try:
-            inv.update({try_dict(arg, inv)[0]: try_dict(arg, inv)[1]})
+            if try_dict(arg, inv)[1] is not None:
+                inv.update({try_dict(arg, inv)[0]: try_dict(arg, inv)[1]})
         except (FormatError, RedundancyError) as e:
             print(e)
     print(inv)
