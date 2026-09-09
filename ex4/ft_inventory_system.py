@@ -16,7 +16,7 @@ class RedundancyError(Exception):
         super().__init__(message)
 
 
-def try_dict(arg: str, inv: dict) -> list[str]:
+def try_dict(arg: str, inv: dict) -> list[str | int]:
     colon: int = 0
     count: int = 0
     for i in range(len(arg)):
