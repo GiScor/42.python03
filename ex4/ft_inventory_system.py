@@ -29,7 +29,7 @@ def try_dict(arg: str, inv: dict) -> list[str | int]:
         raise RedundancyError(f"Redundant item '{arg[:colon]}' - discarding")
     try:
         int(arg[colon+1:])
-        return([arg[:colon], int(arg[colon+1:])])
+        return ([arg[:colon], int(arg[colon+1:])])
     except ValueError:
         raise QuantityError(f"QuantityError for '{arg[:colon]}': "
                             f"invalid literal for "
@@ -73,11 +73,11 @@ if __name__ == '__main__':
     if len(items) > 1:
         for i in inv.keys():
             print(f"Item {i} represents "
-                f"{((inv[i] / sum(inv.values())) * 100):.2f}%")
+                  f"{((inv[i] / sum(inv.values())) * 100):.2f}%")
         print(f"Item most abundant: {find_max(inv)} "
-            f"with quantity {inv[find_max(inv)]}")
+              f"with quantity {inv[find_max(inv)]}")
         print(f"Item least abundant: {find_min(inv)} "
-            f"with quantity {inv[find_min(inv)]}")
+              f"with quantity {inv[find_min(inv)]}")
     else:
         print("\nDude you're so fucking broke. Here, take this!")
     inv.update({'CACCONA': 999999999})

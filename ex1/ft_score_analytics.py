@@ -160,7 +160,7 @@ def count_char(i: int) -> int:
     return total
 
 
-def main() -> None:
+if __name__ == '__main__':
     args:   list[str] = sys.argv[1:]
 
     if len(args) > 0:
@@ -168,12 +168,8 @@ def main() -> None:
         # the walrus operator [:=] assigns and evaluates in a single statement
         if not scores:
             print("No scores submitted!")
-            return
-        if len(scores) < 3:
+        if scores and len(scores) < 3:
             print("Not a lot of scores, this will be boring!")
         scoreboard(scores)
     else:
         print("No scores submitted!")
-
-
-main()
