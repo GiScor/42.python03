@@ -9,18 +9,18 @@ actions:    list[str] = ['shit', 'walk', 'run', 'eat', 'kill',
 
 
 def gen_event(names: list[str], actions: list[str],
-              iterations: int) -> Generator:
+              iterations: int) -> Generator[tuple[str, str], None, None]:
     for i in range(iterations):
         yield (random.choice(names), random.choice(actions))
 
 
-def consume_event(events: list[tuple[str, str,]]) -> Generator:
+def consume_event(
+    events: list[tuple[str, str,]]) -> Generator[tuple[str, str],
+                                                 None, None]:
     while events:
         index: int = random.randrange(len(events))
-        looser: tuple[str, str] = events[index]
+        looser: tuple[str, str] = events.pop(index)
         yield looser
-        events = events[:index] + events[index+1:]
-        yield events
 
 
 if __name__ == '__main__':
@@ -34,10 +34,6 @@ if __name__ == '__main__':
                                      gen_event(names, actions, 10)]
 
     print(f"Built list of 10 events: {events}")
-    switch: int = 1
     for i in consume_event(events):
-        if switch > 0:
-            print(f"Got event from list: {i}")
-        else:
-            print(f"Remaining in list:   {i}")
-        switch *= -1
+        print(f"Got event from list: {i}")
+        print(f"Remaining in list:   {events}")

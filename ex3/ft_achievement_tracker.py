@@ -14,7 +14,7 @@ def all_achievments(players: dict[str, set[str]]) -> set[str]:
 
 
 def unique_achievments(players: dict[str, set[str]], player: str,
-                       all_collected: set[str]) -> set:
+                       all_collected: set[str]) -> set[str]:
     diff = all_collected
     for name in players:
         if name == player:

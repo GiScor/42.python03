@@ -2,21 +2,21 @@ import sys
 
 
 class QuantityError(Exception):
-    def __init__(self, message: str = "Quantity error"):
+    def __init__(self, message: str = "Quantity error") -> None:
         super().__init__(message)
 
 
 class FormatError(Exception):
-    def __init__(self, message: str = "Format error"):
+    def __init__(self, message: str = "Format error") -> None:
         super().__init__(message)
 
 
 class RedundancyError(Exception):
-    def __init__(self, message: str = "Redundancy error"):
+    def __init__(self, message: str = "Redundancy error") -> None:
         super().__init__(message)
 
 
-def try_dict(arg: str, inv: dict) -> list[str | int]:
+def try_dict(arg: str, inv: dict[str, int]) -> tuple[str, int]:
     colon: int = 0
     count: int = 0
     for i in range(len(arg)):
@@ -29,15 +29,14 @@ def try_dict(arg: str, inv: dict) -> list[str | int]:
         raise RedundancyError(f"Redundant item '{arg[:colon]}' - discarding")
     try:
         int(arg[colon+1:])
-        return ([arg[:colon], int(arg[colon+1:])])
+        return ((arg[:colon], int(arg[colon+1:])))
     except ValueError:
         raise QuantityError(f"QuantityError for '{arg[:colon]}': "
                             f"invalid literal for "
                             f"int() with base 10: '{arg[colon+1:]}'")
-        return None
 
 
-def find_max(inv: dict) -> str:
+def find_max(inv: dict[str, int]) -> str:
     high:    str = ''
     high_n:  int = 0
     for i in inv:
@@ -47,7 +46,7 @@ def find_max(inv: dict) -> str:
     return (high)
 
 
-def find_min(inv: dict) -> str:
+def find_min(inv: dict[str, int]) -> str:
     low:    str = list(inv.keys())[0]
     low_n:  int = list(inv.values())[0]
     for i in inv:
@@ -59,14 +58,14 @@ def find_min(inv: dict) -> str:
 
 if __name__ == '__main__':
     args:   list[str] = sys.argv[1:]
-    inv:    dict = {}
+    inv:    dict[str, int] = {}
     for arg in args:
         try:
-            if try_dict(arg, inv) is not None:
-                inv.update({try_dict(arg, inv)[0]: try_dict(arg, inv)[1]})
+            key, val = try_dict(arg, inv)
+            inv[key] = val
         except (FormatError, RedundancyError, QuantityError) as e:
             print(e)
-    items: list = [i for i in inv.keys()]
+    items: list[str | int] = [i for i in inv.keys()]
     print(f"Got inventory: {inv}")
     print(f"Item list: {items}")
     print(f"Total quantity of the {len(items)} items: {sum(inv.values())}")
