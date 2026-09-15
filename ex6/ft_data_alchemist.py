@@ -8,11 +8,13 @@ names_caps_only: list[str] = [n for n in names if n[0].isupper()]
 score: dict[str, int] = {n: random.randrange(1000) for n in names_all_caps}
 top_half: dict[str, int] = {k: score[k] for k in score
                             if score[k] > (sum(score.values()) / len(score))}
+avg: int = round((sum(score.values()) / (len(score) // 2)), 2)
 
 
 if __name__ == '__main__':
-    print(f"Initual list of players: {names}")
-    print(f"List with capitalized names: {names_all_caps}")
-    print(f"List with capitalized names only: {names_caps_only}")
-    print(f"Score dict: {score}")
-    print(f"Top {len(score) // 2} scores: {top_half}")
+    print(f"Initual list of players: {names}\n\n"
+          f"List with capitalized names: {names_all_caps}\n\n"
+          f"List with capitalized names only: {names_caps_only}\n\n"
+          f"Score dict: {score}\n\n"
+          f"Score average: {avg}\n\n"
+          f"Top {len(score) // 2} scores: {top_half}")
