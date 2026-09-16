@@ -8,7 +8,7 @@ names_caps_only: list[str] = [n for n in names if n[0].isupper()]
 score: dict[str, int] = {n: random.randrange(1000) for n in names_all_caps}
 top_half: dict[str, int] = {k: score[k] for k in score
                             if score[k] > (sum(score.values()) / len(score))}
-avg: int = round((sum(score.values()) / (len(score) // 2)), 2)
+avg: float = round((sum(score.values()) / (len(score) // 2)), 2)
 
 
 if __name__ == '__main__':
